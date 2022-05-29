@@ -48,6 +48,9 @@ class SnakeGame:
         self.scoreboard = ScoreBoard()
         self.speed = .1
 
+        self.__bind_key()
+        self.scoreboard.display_score()
+
         self.is_paused = False
         self.__text = Turtle()
         self.__text.color('white')
@@ -125,9 +128,6 @@ class SnakeGame:
         self.save_score()
 
     def play(self):
-        self.__bind_key()
-        self.scoreboard.display_score()
-
         while True:
             self.screen.update()
             time.sleep(self.speed)

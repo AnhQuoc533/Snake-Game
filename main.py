@@ -20,7 +20,6 @@ def main():
         scr.onkey(lambda: reset(game), 'Return')  # 'enter' key
 
         game.play()
-        scr.mainloop()
 
     except Exception:
         pass
