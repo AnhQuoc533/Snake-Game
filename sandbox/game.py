@@ -107,11 +107,14 @@ class SnakeGame:
             f.write(str(highest_scores))
 
     def pause(self):
-        if self.__text is not None:
+        if self.is_paused is not None:
             self.is_paused = not self.is_paused
             self.__change_text()
 
     def end(self):
+        self.is_paused = None  # Fix 'pause' text still appears after game is over
+        self.save_scores()
+
         self.__text.clear()
         self.__text.color('red')
         self.__text.goto(0, 0)
@@ -121,9 +124,6 @@ class SnakeGame:
         self.__text.color('white')
         self.__text.goto(0, -18)
         self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15, "normal"))
-
-        self.__text = None  # Fix 'pause' text still appears after game is over
-        self.save_scores()
 
     def play(self):
         while True:
