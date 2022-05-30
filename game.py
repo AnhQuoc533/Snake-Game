@@ -146,9 +146,3 @@ class SnakeGame:
                 if self.snake.is_out_of_bound() or self.snake.is_hit():
                     self.end()
                     break
-
-        self.screen.mainloop()
-
-    def reset(self):
-        self.save_score()
-        self.screen.clearscreen()

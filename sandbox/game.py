@@ -153,8 +153,6 @@ class SnakeGame:
                     self.end()
                     break
 
-        self.screen.mainloop()
-
     def reset(self):
         self.save_scores()
         self.screen.clearscreen()
