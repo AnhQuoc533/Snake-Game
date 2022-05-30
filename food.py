@@ -5,8 +5,24 @@ import random
 class SnakeFood(turtle.Turtle):
 
     def __init__(self, snake_body: list):
-        self.food_icons = []
-        self.__add_icons()
+        self.food_icons = [
+            'gfx/apple.gif',
+            'gfx/banana.gif',
+            'gfx/blueberry.gif',
+            'gfx/candy.gif',
+            'gfx/cherry.gif',
+            'gfx/chocolate.gif',
+            'gfx/cupcake.gif',
+            'gfx/grape.gif',
+            'gfx/kiwi.gif',
+            'gfx/orange.gif',
+            'gfx/pear.gif',
+            'gfx/pie.gif',
+            'gfx/strawberry.gif',
+            'gfx/watermelon.gif'
+        ]
+        for icon in self.food_icons:
+            turtle.addshape(icon)
 
         super().__init__()
         self.shape(random.choice(self.food_icons))
@@ -14,16 +30,6 @@ class SnakeFood(turtle.Turtle):
         self.shapesize()
         self.speed("fastest")
         self.refresh(snake_body)
-
-    def __add_icons(self):
-        import os
-
-        icons = os.listdir('gfx')
-        for icon in icons:
-            if icon != 'border.gif':
-                food_icon = 'gfx/' + icon
-                turtle.addshape(food_icon)
-                self.food_icons.append(food_icon)
 
     def refresh(self, snake_body: list):
         while True:

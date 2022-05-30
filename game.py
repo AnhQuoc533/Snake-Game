@@ -2,7 +2,7 @@ from snake import Snake
 from food import SnakeFood
 from turtle import Turtle, Screen
 import time
-FORMAT = {'align': 'center', 'font': ("Courier", 20, "normal")}
+FORMAT = {'align': 'center', 'font': ("Courier", 20)}
 
 
 class ScoreBoard(Turtle):
@@ -58,24 +58,16 @@ class SnakeGame:
         self.__text.speed('fastest')
         self.__text.penup()
         self.__text.goto(0, -335)
-        self.__text.write("Press 'space' to pause the game.", **FORMAT)
+        self.__text.write("Press 'Space' to pause the game.", **FORMAT)
 
     def __bind_key(self):
         self.screen.listen()
         self.screen.onkey(self.pause, 'space')
 
-        def up():
-            self.snake.up(self.is_paused)
-
-        def down():
-            self.snake.down(self.is_paused)
-
-        def left():
-            self.snake.left(self.is_paused)
-
-        def right():
-            self.snake.right(self.is_paused)
-
+        def up(): self.snake.up(self.is_paused)
+        def down(): self.snake.down(self.is_paused)
+        def left(): self.snake.left(self.is_paused)
+        def right(): self.snake.right(self.is_paused)
         movement = [up, down, left, right]
 
         for move, key in zip(movement, ['Up', 'Down', 'Left', 'Right']):
@@ -121,7 +113,7 @@ class SnakeGame:
         # Restart game suggestion
         self.__text.color('white')
         self.__text.goto(0, -18)
-        self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15, "normal"))
+        self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15))
 
         self.is_paused = True
         self.__text = None  # Fix 'pause' text still appears after game is over
