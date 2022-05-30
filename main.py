@@ -20,7 +20,8 @@ def main():
 
         screen.mainloop()
 
-    except Exception:
+    except Exception as e:
+        # print(e)
         pass
 
 

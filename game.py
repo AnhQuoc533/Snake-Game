@@ -100,24 +100,23 @@ class SnakeGame:
                 f.write(str(self.scoreboard.score))
 
     def pause(self):
-        if self.__text is not None:
+        if self.is_paused is not None:
             self.is_paused = not self.is_paused
             self.__change_text()
 
     def end(self):
+        self.is_paused = None  # Fix 'pause' text still appears after game is over
+        self.save_score()
+
         self.__text.clear()
         self.__text.color('red')
         self.__text.goto(0, 0)
-        self.__text.write('GAME OVER!', **FORMAT)
+        self.__text.write('GAME OVER!', align='center', font=("Courier", 25, "bold"))
 
         # Restart game suggestion
         self.__text.color('white')
         self.__text.goto(0, -18)
         self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15))
-
-        self.is_paused = True
-        self.__text = None  # Fix 'pause' text still appears after game is over
-        self.save_score()
 
     def play(self):
         while True:
