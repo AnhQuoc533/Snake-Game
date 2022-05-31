@@ -13,12 +13,9 @@ BORDER = 290
 
 class Snake:
 
-    def __init__(self, positions: list[tuple[int, int]] = None):
+    def __init__(self):
         self.body = []
-
-        if not positions:
-            positions = STARTING_POS
-        for position in positions:
+        for position in STARTING_POS:
             self.add_segment(position)
 
         self.head = self.body[0]
