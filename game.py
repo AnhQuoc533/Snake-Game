@@ -20,7 +20,7 @@ class ScoreBoard(Turtle):
         try:
             with open('pp.dat', 'r') as f:
                 self.high_score = int(f.read())
-        except FileNotFoundError:
+        except (FileNotFoundError, ValueError):
             self.high_score = 0
 
     def display_score(self):

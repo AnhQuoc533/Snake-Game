@@ -2,7 +2,7 @@ from snake import Snake
 from food import SnakeFood
 from turtle import Turtle, Screen
 import time
-FORMAT = {'align': 'center', 'font': ("Courier", 20, "normal")}
+FORMAT = {'align': 'center', 'font': ("Courier", 20)}
 
 
 class ScoreBoard(Turtle):
@@ -15,32 +15,32 @@ class ScoreBoard(Turtle):
         self.penup()
         self.goto(0, 310)
 
-        self.scores = 0
+        self.score = 0
 
         try:
             with open('pp.dat', 'r') as f:
                 self.high_score = int(f.read())
-        except FileNotFoundError:
+        except (FileNotFoundError, ValueError):
             self.high_score = 0
 
-    def display_scores(self):
-        self.write(f'Scores: {self.scores} - High scores: {self.high_score}', **FORMAT)
+    def display_score(self):
+        self.write(f'Score: {self.score} - High score: {self.high_score}', **FORMAT)
 
-    def increase_scores(self):
-        self.scores += 1
+    def increase_score(self):
+        self.score += 1
         self.clear()
-        self.display_scores()
+        self.display_score()
 
 
 class SnakeGame:
 
     def __init__(self):
         self.screen = Screen()
+        self.screen.bgcolor("black")
         self.screen.setup(width=700, height=700)
         self.screen.cv._rootwindow.resizable(False, False)  # Access Tkinter function from Canvas screen
         self.screen.bgpic('gfx/border.gif')
         self.screen.title("Snake Game")
-        self.screen.bgcolor("black")
         self.screen.tracer(0)  # Turn off automatic screen update
 
         self.snake = Snake()
@@ -49,7 +49,7 @@ class SnakeGame:
         self.speed = .1
 
         self.__bind_key()
-        self.scoreboard.display_scores()
+        self.scoreboard.display_score()
 
         self.is_paused = False
         self.__text = Turtle()
@@ -58,7 +58,7 @@ class SnakeGame:
         self.__text.speed('fastest')
         self.__text.penup()
         self.__text.goto(0, -335)
-        self.__text.write("Press 'space' to pause the game.", **FORMAT)
+        self.__text.write("Press 'Space' to pause the game.", **FORMAT)
 
     def __bind_key(self):
         self.screen.listen()
@@ -81,11 +81,6 @@ class SnakeGame:
         for move, key in zip(movement, 'WSAD'):
             self.screen.onkey(move, key)
 
-        # Exit game
-        self.screen.onkey(self.screen.bye, 'Escape')  # 'esc' key
-        # Restart game
-        self.screen.onkey(self.reset, 'Return')  # 'enter' key
-
     def __change_text(self):
         if self.is_paused:
             self.__text.clear()
@@ -98,13 +93,11 @@ class SnakeGame:
                 self.__text.undo()
             self.__text.write("Press 'Space' to pause the game.", **FORMAT)
 
-    def save_scores(self):
-        # Save highest scores
-        with open('pp.dat', 'w') as f:
-            highest_scores = self.scoreboard.high_score
-            if highest_scores < self.scoreboard.scores:
-                highest_scores = self.scoreboard.scores
-            f.write(str(highest_scores))
+    def save_score(self):
+        # Save highest score
+        if self.scoreboard.high_score < self.scoreboard.score:
+            with open('pp.dat', 'w') as f:
+                f.write(str(self.scoreboard.score))
 
     def pause(self):
         if self.is_paused is not None:
@@ -113,17 +106,17 @@ class SnakeGame:
 
     def end(self):
         self.is_paused = None  # Fix 'pause' text still appears after game is over
-        self.save_scores()
+        self.save_score()
 
         self.__text.clear()
         self.__text.color('red')
         self.__text.goto(0, 0)
-        self.__text.write('GAME OVER!', **FORMAT)
+        self.__text.write('GAME OVER!', align='center', font=("Courier", 25, "bold"))
 
         # Restart game suggestion
         self.__text.color('white')
         self.__text.goto(0, -18)
-        self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15, "normal"))
+        self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15))
 
     def play(self):
         while True:
@@ -140,24 +133,15 @@ class SnakeGame:
                 # Detect collision with food
                 if self.snake.head.distance(self.food) < 10:
                     self.food.refresh(self.snake.body)
-                    self.scoreboard.increase_scores()
+                    self.scoreboard.increase_score()
                     self.snake.grow()
 
                     # Increase the speed
-                    if self.scoreboard.scores % 10 == 0:
-                        self.speed = (100 - self.scoreboard.scores) / 1000
+                    if self.scoreboard.score % 10 == 0:
+                        self.speed = (100 - self.scoreboard.score) / 1000
                         # print('Speed =', self.speed)  # Debug
 
                 # Detect collision with border or with itself
                 if self.snake.is_out_of_bound() or self.snake.is_hit():
                     self.end()
                     break
-
-    def reset(self):
-        self.save_scores()
-        self.screen.clearscreen()
-        self.__init__()
-
-
-if __name__ == '__main__':
-    SnakeGame().play()
