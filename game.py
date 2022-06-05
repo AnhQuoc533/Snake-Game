@@ -82,7 +82,18 @@ class SnakeGame:
             self.screen.onkey(move, key)
 
     def __change_text(self):
-        if self.is_paused:
+        if self.is_paused is None:
+            self.__text.clear()
+            self.__text.color('red')
+            self.__text.goto(0, 0)
+            self.__text.write('GAME OVER!', align='center', font=("Courier", 25, "bold"))
+
+            # Restart game suggestion
+            self.__text.color('white')
+            self.__text.goto(0, -18)
+            self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15))
+
+        elif self.is_paused:
             self.__text.clear()
             self.__text.write("Press 'Space' to continue the game.", **FORMAT)
             self.__text.goto(0, 0)
@@ -102,21 +113,12 @@ class SnakeGame:
     def pause(self):
         if self.is_paused is not None:
             self.is_paused = not self.is_paused
-            self.__change_text()
+        self.__change_text()
 
     def end(self):
         self.is_paused = None  # Fix 'pause' text still appears after game is over
         self.save_score()
-
-        self.__text.clear()
-        self.__text.color('red')
-        self.__text.goto(0, 0)
-        self.__text.write('GAME OVER!', align='center', font=("Courier", 25, "bold"))
-
-        # Restart game suggestion
-        self.__text.color('white')
-        self.__text.goto(0, -18)
-        self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15))
+        self.__change_text()
 
     def play(self):
         while True:
