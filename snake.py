@@ -56,9 +56,6 @@ class Snake:
         self.add_segment(self.body[-1].position())
 
     def is_out_of_bound(self):
-        # For testing
-        # print('x =', self.__snake.head.xcor(), 'y =', self.__snake.head.ycor())
-        # print('Position =', self.__snake.head.pos())
         return abs(self.head.xcor()) > BORDER or abs(self.head.ycor()) > BORDER
 
     def is_hit(self):

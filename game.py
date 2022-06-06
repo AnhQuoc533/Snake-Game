@@ -127,10 +127,6 @@ class SnakeGame:
 
             if not self.is_paused:
                 self.snake.move()
-                # For testing
-                # print(self.__snake.head.position())
-                # print([seg.position() for seg in self.__snake.body])
-                # print('Head-Food =', self.__snake.head.distance(self.__food))
 
                 # Detect collision with food
                 if self.snake.head.distance(self.food) < 10:
@@ -141,7 +137,6 @@ class SnakeGame:
                     # Increase the speed
                     if self.scoreboard.score % 10 == 0:
                         self.speed = (100 - self.scoreboard.score) / 1000
-                        # print('Speed =', self.speed)  # Debug
 
                 # Detect collision with border or with itself
                 if self.snake.is_out_of_bound() or self.snake.is_hit():
