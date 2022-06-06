@@ -142,3 +142,10 @@ class SnakeGame:
                 if self.snake.is_out_of_bound() or self.snake.is_hit():
                     self.end()
                     break
+
+
+# Testing with no exception handling
+if __name__ == '__main__':
+    SnakeGame().play()
+    Screen().mainloop()
+

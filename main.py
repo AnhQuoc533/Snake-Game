@@ -3,20 +3,18 @@ from turtle import Screen
 # Exception-free version
 
 
-def reset(scr, game):
+def reset(scr):
     scr.clearscreen()
-    del game
     main()
 
 
 def main():
     try:
         screen = Screen()
-        snake_game = SnakeGame()
-        snake_game.play()
+        SnakeGame().play()
 
         # Restart game
-        screen.onkey(lambda: reset(screen, snake_game), 'Return')  # 'enter' key
+        screen.onkey(lambda: reset(screen), 'Return')  # 'enter' key
 
         screen.mainloop()
 
