@@ -125,7 +125,7 @@ class SnakeGame:
             self.screen.update()
             time.sleep(self.speed)
 
-            if not self.is_paused:
+            if self.is_paused is False:
                 self.snake.move()
 
                 # Detect collision with food
@@ -141,11 +141,13 @@ class SnakeGame:
                 # Detect collision with border or with itself
                 if self.snake.is_out_of_bound() or self.snake.is_hit():
                     self.end()
-                    break
+                    self.screen.onkey(self.reset, 'Return')
+                    # break
+
+    def reset(self):
+        self.screen.clearscreen()
+        self.__init__()
 
 
-# Testing with no exception handling
 if __name__ == '__main__':
     SnakeGame().play()
-    Screen().mainloop()
-
