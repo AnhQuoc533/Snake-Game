@@ -4,8 +4,8 @@
 # These functions sometimes return relative values (decimals) instead of absolute values (integers)
 # which causes errors if we compare two objects for the exact position.
 
-import turtle
-TURTLE_SIZE = 20
+from turtle import Turtle
+BODY_SIZE = 20
 STARTING_POS = [(20, 0), (0, 0), (-20, 0)]
 UP, DOWN, LEFT, RIGHT = 90, 270, 180, 0
 BORDER = 290
@@ -22,7 +22,7 @@ class Snake:
         self.__prev_heading = self.head.heading()  # Fix simultaneous movement
 
     def add_segment(self, position: tuple):
-        t = turtle.Turtle(shape='square')
+        t = Turtle(shape='square')
         t.color('white')
         t.penup()
         t.goto(position)
@@ -49,7 +49,7 @@ class Snake:
             self.body[i].goto(self.body[i - 1].position())
             # self.body[i].setheading(self.body[i - 1].heading())
 
-        self.head.forward(TURTLE_SIZE)
+        self.head.forward(BODY_SIZE)
         self.__prev_heading = self.head.heading()
 
     def grow(self):
