@@ -1,5 +1,4 @@
-from game import SnakeGame
-from turtle import Screen
+from game import SnakeGame, Screen
 # Exception-free version
 
 

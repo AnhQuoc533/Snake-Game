@@ -19,7 +19,7 @@ class Snake:
             self.add_segment(position)
 
         self.head = self.body[0]
-        self.__prev_heading = self.head.heading()  # Fix simultaneous movement
+        self.__prev_heading = self.head.heading()  # Block simultaneous movement causing conflict
 
     def add_segment(self, position: tuple):
         t = Turtle(shape='square')

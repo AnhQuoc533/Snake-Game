@@ -1,6 +1,6 @@
-from snake import BODY_SIZE
 import turtle
 import random
+from snake import BODY_SIZE
 FOOD_ICONS = [
     'gfx/apple.gif',
     'gfx/banana.gif',

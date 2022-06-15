@@ -2,7 +2,7 @@ from snake import Snake
 from food import SnakeFood
 from turtle import Turtle, Screen
 import time
-FORMAT = {'align': 'center', 'font': ("Courier", 20)}
+FORMAT = {'align': 'center', 'font': ("Courier", 20, "normal")}
 
 
 class ScoreBoard(Turtle):
@@ -91,7 +91,7 @@ class SnakeGame:
             # Restart game suggestion
             self.__text.color('white')
             self.__text.goto(0, -18)
-            self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15))
+            self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15, "normal"))
 
         elif self.is_paused:
             self.__text.clear()
@@ -116,7 +116,7 @@ class SnakeGame:
         self.__change_text()
 
     def end(self):
-        self.is_paused = None  # Fix 'pause' text still appears after game is over
+        self.is_paused = None  # Block 'pause' text appearance after game is over
         self.save_score()
         self.__change_text()
 
