@@ -1,8 +1,7 @@
 from snake import Snake
 from food import SnakeFood
 from turtle import Turtle, Screen
-import time
-FORMAT = {'align': 'center', 'font': ("Courier", 20)}
+FORMAT = {'align': 'center', 'font': ("Courier", 20, "normal")}
 
 
 class ScoreBoard(Turtle):
@@ -46,7 +45,7 @@ class SnakeGame:
         self.snake = Snake()
         self.food = SnakeFood(self.snake.body)
         self.scoreboard = ScoreBoard()
-        self.speed = .1
+        self.speed = 100
 
         self.__bind_key()
         self.scoreboard.display_score()
@@ -91,7 +90,7 @@ class SnakeGame:
             # Restart game suggestion
             self.__text.color('white')
             self.__text.goto(0, -18)
-            self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15))
+            self.__text.write("Press 'Enter' to restart the game.", align='center', font=("Courier", 15, "normal"))
 
         elif self.is_paused:
             self.__text.clear()
@@ -120,33 +119,35 @@ class SnakeGame:
         self.save_score()
         self.__change_text()
 
-    def play(self):
-        while True:
-            self.screen.update()
-            time.sleep(self.speed)
-
-            if self.is_paused is False:
-                self.snake.move()
-
-                # Detect collision with food
-                if self.snake.head.distance(self.food) < 10:
-                    self.food.refresh(self.snake.body)
-                    self.scoreboard.increase_score()
-                    self.snake.grow()
-
-                    # Increase the speed
-                    if self.scoreboard.score % 10 == 0:
-                        self.speed = (100 - self.scoreboard.score) / 1000
-
-                # Detect collision with border or with itself
-                if self.snake.is_out_of_bound() or self.snake.is_hit():
-                    self.end()
-                    self.screen.onkey(self.reset, 'Return')
-                    # break
-
     def reset(self):
         self.screen.clearscreen()
         self.__init__()
+
+    def __mechanism(self):
+        if self.is_paused is False:
+            self.screen.update()
+            self.snake.move()
+
+            # Detect collision with food
+            if self.snake.head.distance(self.food) < 10:
+                self.food.refresh(self.snake.body)
+                self.scoreboard.increase_score()
+                self.snake.grow()
+
+                # Increase the speed
+                if self.scoreboard.score % 10 == 0:
+                    self.speed = 100 - self.scoreboard.score
+
+            # Detect collision with border or with itself
+            if self.snake.is_out_of_bound() or self.snake.is_hit():
+                self.end()
+                self.screen.onkey(self.reset, 'Return')
+
+        self.screen.ontimer(self.__mechanism, self.speed)
+
+    def play(self):
+        self.__mechanism()
+        self.screen.mainloop()
 
 
 if __name__ == '__main__':
