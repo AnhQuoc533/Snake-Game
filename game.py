@@ -135,11 +135,11 @@ class SnakeGame:
                 self.snake.grow()
 
                 # Increase the speed
-                if self.scoreboard.score % 10 == 0:
-                    self.speed = 100 - self.scoreboard.score
+                if self.scoreboard.score % 10 == 0 and self.speed > 10:
+                    self.speed -= 10
 
             # Detect collision with border or with itself
-            if self.snake.is_out_of_bound() or self.snake.is_hit():
+            elif self.snake.is_out_of_bound() or self.snake.is_hit():
                 self.end()
                 self.screen.onkey(self.reset, 'Return')
 

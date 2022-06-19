@@ -23,10 +23,10 @@ class Snake:
         t = Turtle(shape='square')
         t.color('white')
         t.penup()
-        t.setx(20)
+        t.setx(BODY_SIZE)
         self.body.append(t)
 
-        for x in (0, -20):
+        for x in (0, -BODY_SIZE):
             clone = t.clone()
             clone.setx(x)
             self.body.append(clone)
