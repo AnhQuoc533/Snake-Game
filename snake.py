@@ -6,7 +6,6 @@
 
 from turtle import Turtle
 BODY_SIZE = 20
-STARTING_POS = [(20, 0), (0, 0), (-20, 0)]
 UP, DOWN, LEFT, RIGHT = 90, 270, 180, 0
 BORDER = 290
 
@@ -15,18 +14,23 @@ class Snake:
 
     def __init__(self):
         self.body = []
-        for position in STARTING_POS:
-            self.add_segment(position)
+        self.__init_body()
 
         self.head = self.body[0]
+        self.move_speed = 100  # Milliseconds
         self.__prev_heading = self.head.heading()  # Block simultaneous movement causing conflict
 
-    def add_segment(self, position: tuple):
+    def __init_body(self):
         t = Turtle(shape='square')
         t.color('white')
         t.penup()
-        t.goto(position)
+        t.setx(BODY_SIZE)
         self.body.append(t)
+
+        for x in (0, -BODY_SIZE):
+            clone = t.clone()
+            clone.setx(x)
+            self.body.append(clone)
 
     def up(self, is_paused=False):
         if self.__prev_heading != DOWN and not is_paused:
@@ -53,7 +57,14 @@ class Snake:
         self.__prev_heading = self.head.heading()
 
     def grow(self):
-        self.add_segment(self.body[-1].position())
+        self.body.append(self.body[-1].clone())
+        # self.add_segment(self.body[-1].position())
+
+    def speed_up(self):
+        if self.move_speed > 10:
+            self.move_speed -= 10
+        elif self.move_speed > 1:
+            self.move_speed -= 1
 
     def is_out_of_bound(self):
         return abs(self.head.xcor()) > BORDER or abs(self.head.ycor()) > BORDER

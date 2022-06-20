@@ -1,7 +1,8 @@
 from snake import Snake
 from food import SnakeFood
 from turtle import Turtle, Screen
-import time
+
+FPS = 60
 FORMAT = {'align': 'center', 'font': ("Courier", 20, "normal")}
 
 
@@ -16,7 +17,6 @@ class ScoreBoard(Turtle):
         self.goto(0, 310)
 
         self.score = 0
-
         try:
             with open('pp.dat', 'r') as f:
                 self.high_score = int(f.read())
@@ -46,7 +46,6 @@ class SnakeGame:
         self.snake = Snake()
         self.food = SnakeFood(self.snake.body)
         self.scoreboard = ScoreBoard()
-        self.speed = .1
 
         self.__bind_key()
         self.scoreboard.display_score()
@@ -113,32 +112,48 @@ class SnakeGame:
     def pause(self):
         if self.is_paused is not None:
             self.is_paused = not self.is_paused
-        self.__change_text()
+            self.__change_text()
 
     def end(self):
         self.is_paused = None  # Block 'pause' text appearance after game is over
         self.save_score()
         self.__change_text()
 
-    def play(self):
-        while True:
+    def reset(self):
+        self.screen.clearscreen()
+        self.__init__()
+
+    def __snake_animation(self):
+        if self.is_paused is False:
+            self.snake.move()
+
+            # Detect collision with food
+            if self.snake.head.distance(self.food) < 10:
+                self.food.refresh(self.snake.body)
+                self.scoreboard.increase_score()
+                self.snake.grow()
+
+                # Increase the speed
+                if self.scoreboard.score % 10 == 0:
+                    self.snake.speed_up()
+
+            # Detect collision with border or with itself
+            elif self.snake.is_out_of_bound() or self.snake.is_hit():
+                self.end()
+                self.screen.onkey(self.reset, 'Return')
+
+        self.screen.ontimer(self.__snake_animation, self.snake.move_speed)
+
+    def __main_animation(self):
+        if self.is_paused is False:
             self.screen.update()
-            time.sleep(self.speed)
+        self.screen.ontimer(self.__main_animation, 1000//FPS)
 
-            if not self.is_paused:
-                self.snake.move()
+    def play(self):
+        self.__snake_animation()
+        self.__main_animation()
+        self.screen.mainloop()
 
-                # Detect collision with food
-                if self.snake.head.distance(self.food) < 10:
-                    self.food.refresh(self.snake.body)
-                    self.scoreboard.increase_score()
-                    self.snake.grow()
 
-                    # Increase the speed
-                    if self.scoreboard.score % 10 == 0:
-                        self.speed = (100 - self.scoreboard.score) / 1000
-
-                # Detect collision with border or with itself
-                if self.snake.is_out_of_bound() or self.snake.is_hit():
-                    self.end()
-                    break
+if __name__ == '__main__':
+    SnakeGame().play()
