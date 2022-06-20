@@ -17,6 +17,7 @@ class Snake:
         self.__init_body()
 
         self.head = self.body[0]
+        self.move_speed = 100  # Milliseconds
         self.__prev_heading = self.head.heading()  # Block simultaneous movement causing conflict
 
     def __init_body(self):
@@ -58,6 +59,12 @@ class Snake:
     def grow(self):
         self.body.append(self.body[-1].clone())
         # self.add_segment(self.body[-1].position())
+
+    def speed_up(self):
+        if self.move_speed > 10:
+            self.move_speed -= 10
+        elif self.move_speed > 1:
+            self.move_speed -= 1
 
     def is_out_of_bound(self):
         return abs(self.head.xcor()) > BORDER or abs(self.head.ycor()) > BORDER

@@ -1,6 +1,8 @@
 from snake import Snake
 from food import SnakeFood
 from turtle import Turtle, Screen
+
+FPS = 60
 FORMAT = {'align': 'center', 'font': ("Courier", 20, "normal")}
 
 
@@ -15,7 +17,6 @@ class ScoreBoard(Turtle):
         self.goto(0, 310)
 
         self.score = 0
-
         try:
             with open('pp.dat', 'r') as f:
                 self.high_score = int(f.read())
@@ -45,7 +46,6 @@ class SnakeGame:
         self.snake = Snake()
         self.food = SnakeFood(self.snake.body)
         self.scoreboard = ScoreBoard()
-        self.speed = 100
 
         self.__bind_key()
         self.scoreboard.display_score()
@@ -112,7 +112,7 @@ class SnakeGame:
     def pause(self):
         if self.is_paused is not None:
             self.is_paused = not self.is_paused
-        self.__change_text()
+            self.__change_text()
 
     def end(self):
         self.is_paused = None  # Fix 'pause' text still appears after game is over
@@ -123,9 +123,8 @@ class SnakeGame:
         self.screen.clearscreen()
         self.__init__()
 
-    def __mechanism(self):
+    def __snake_animation(self):
         if self.is_paused is False:
-            self.screen.update()
             self.snake.move()
 
             # Detect collision with food
@@ -135,18 +134,24 @@ class SnakeGame:
                 self.snake.grow()
 
                 # Increase the speed
-                if self.scoreboard.score % 10 == 0 and self.speed > 10:
-                    self.speed -= 10
+                if self.scoreboard.score % 10 == 0:
+                    self.snake.speed_up()
 
             # Detect collision with border or with itself
             elif self.snake.is_out_of_bound() or self.snake.is_hit():
                 self.end()
                 self.screen.onkey(self.reset, 'Return')
 
-        self.screen.ontimer(self.__mechanism, self.speed)
+        self.screen.ontimer(self.__snake_animation, self.snake.move_speed)
+
+    def __main_animation(self):
+        if self.is_paused is False:
+            self.screen.update()
+        self.screen.ontimer(self.__main_animation, 1000//FPS)
 
     def play(self):
-        self.__mechanism()
+        self.__snake_animation()
+        self.__main_animation()
         self.screen.mainloop()
 
 
