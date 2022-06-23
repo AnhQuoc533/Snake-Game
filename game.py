@@ -116,6 +116,7 @@ class SnakeGame:
 
     def end(self):
         self.is_paused = None  # Block 'pause' text appearance after game is over
+        self.screen.update()
         self.save_score()
         self.__change_text()
 
